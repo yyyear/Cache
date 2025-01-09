@@ -47,3 +47,40 @@ func (c *Cache) GetExpired(key string) (time.Time, bool) {
 	cacheItem := item.(cacheItem)
 	return cacheItem.expired, true
 }
+
+func (c *Cache) GetTTL(key string) (time.Duration, bool) {
+	res, ok := c.GetExpired(key)
+	if ok {
+		return res.Sub(time.Now()), ok
+	}
+	return 0, false
+}
+
+func (c *Cache) GetString(key string) (string, bool) {
+	result, ok := c.Get(key)
+	if ok {
+		return result.(string), ok
+	}
+	return "", false
+}
+
+func (c *Cache) GetInt64(key string) (int64, bool) {
+	result, ok := c.Get(key)
+	if ok {
+		switch result.(type) {
+		case int:
+			return int64(result.(int)), ok
+		case int64:
+			return result.(int64), ok
+		case int32:
+			return int64(result.(int32)), ok
+		case int16:
+			return int64(result.(int16)), ok
+		case int8:
+			return int64(result.(int8)), ok
+		case uint:
+			return int64(result.(uint)), ok
+		}
+	}
+	return 0, false
+}

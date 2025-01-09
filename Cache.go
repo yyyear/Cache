@@ -36,3 +36,14 @@ func (c *Cache) Get(key string) (interface{}, bool) {
 
 	return cacheItem.value, true
 }
+
+// GetExpired 获取缓存的过期时间
+func (c *Cache) GetExpired(key string) (time.Time, bool) {
+	item, ok := c.syncMap.Load(key)
+	if !ok {
+		return time.Time{}, false
+	}
+
+	cacheItem := item.(cacheItem)
+	return cacheItem.expired, true
+}

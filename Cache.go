@@ -84,3 +84,37 @@ func (c *Cache) GetInt64(key string) (int64, bool) {
 	}
 	return 0, false
 }
+
+func (c *Cache) GetUint(key string) (uint, bool) {
+	result, ok := c.Get(key)
+	if ok {
+		switch result.(type) {
+		case int:
+			return uint(result.(int)), ok
+		case int64:
+			return uint(result.(int64)), ok
+		case int32:
+			return uint(result.(int32)), ok
+		case int16:
+			return uint(result.(int16)), ok
+		case int8:
+			return uint(result.(int8)), ok
+		case uint:
+			return uint(result.(uint)), ok
+		}
+	}
+	return 0, false
+}
+
+func (c *Cache) GetBool(key string) (bool, bool) {
+	result, ok := c.Get(key)
+	if ok {
+		switch result.(type) {
+		case bool:
+			return result.(bool), ok
+		default:
+			return false, ok
+		}
+	}
+	return true, false
+}

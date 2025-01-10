@@ -85,6 +85,10 @@ func (c *Cache) GetInt64(key string) (int64, bool) {
 	return 0, false
 }
 
+func (c *Cache) Delete(key string) {
+	c.syncMap.Delete(key)
+}
+
 func (c *Cache) GetUint(key string) (uint, bool) {
 	result, ok := c.Get(key)
 	if ok {
